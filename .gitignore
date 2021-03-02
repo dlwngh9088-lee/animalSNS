@@ -1,6 +1,7 @@
 .env
-node_modules
 package-lock.json
 .vscode
+
 dist
+/node_modules/
 uploads
