@@ -3,6 +3,5 @@ package-lock.json
 .vscode
 
 dist
-node_modules
-node_modules/
+/node_modules/
 uploads
