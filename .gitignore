@@ -1,7 +1,9 @@
+#file
 .env
 package-lock.json
 .vscode
 
-dist
-/node_modules/
-uploads
+#folder
+dist/
+node_modules/
+uploads/
