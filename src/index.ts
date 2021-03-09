@@ -1,5 +1,16 @@
 import express, { Request, Response } from 'express';
-import path from 'path';
+import { Server } from './config/express';
+
+const State = {
+    INITAL: 1, 
+    START: 2, 
+    RUNNING: 3,
+    STOPPED: 4,
+    EXITING: 5,
+    ETC: 6
+}
+
+let expressState = 1;
 
 class App {
     constructor(public express: express.Application) {
@@ -7,17 +18,43 @@ class App {
     }
 }
 
-const app = new App(express()).express;
+export function start() {
+    switch (expressState) {
+        case State.INITAL:
+            break;
+        case State.START:
+        case State.RUNNING:
+        case State.STOPPED:
+        case State.EXITING:
+            stop();
+            break;
+        case State.ETC:
+    }
 
-//ejs 적용
-app.set('views', path.join(__dirname, '../views'));
-app.set('view engine', 'ejs');
-//ejs 적용
+    expressState = State.START;
 
-app.get("/", function(req: Request, res: Response) {
-    res.render('page/main');
-})
+    const app = new App(express()).express;
+    const server = new Server(app);
+    server.settings();
+    server.createServer();
 
-app.listen(8080, function() {
-    console.log("8080 server start");
-})
+    expressState = State.RUNNING;
+}
+
+export function stop() {
+
+}
+
+export function exit() {
+
+}
+
+// app.get("/", function(req: Request, res: Response) {
+//     res.render('page/main');
+// });
+
+if (require.main === module) {
+    exports.start();
+}
+
+
