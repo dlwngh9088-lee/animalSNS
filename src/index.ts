@@ -1,16 +1,9 @@
-import express, { Request, Response } from 'express';
-import { Server } from './config/express';
-
-const State = {
-    INITAL: 1, 
-    START: 2, 
-    RUNNING: 3,
-    STOPPED: 4,
-    EXITING: 5,
-    ETC: 6
-}
-
-let expressState = 1;
+import express from 'express';
+import createServer from './config/express'; 
+import errorHanlder from './config/errorHandler'; 
+import routes from './routes/routes';
+import controller from './routes/controller';
+import conrollerFile from './routes/controllerFile';
 
 class App {
     constructor(public express: express.Application) {
@@ -19,42 +12,21 @@ class App {
 }
 
 export function start() {
-    switch (expressState) {
-        case State.INITAL:
-            break;
-        case State.START:
-        case State.RUNNING:
-        case State.STOPPED:
-        case State.EXITING:
-            stop();
-            break;
-        case State.ETC:
-    }
-
-    expressState = State.START;
-
     const app = new App(express()).express;
-    const server = new Server(app);
-    server.settings();
-    server.createServer();
+    //서버 생성 및 세팅
+    createServer(app);
 
-    expressState = State.RUNNING;
+    //routes
+    app.use('/', routes);
+    app.use('/controller', controller);
+    app.use('/conrollerFile', conrollerFile);
+
+    //error middleware
+    errorHanlder(app);
 }
 
-export function stop() {
-
-}
-
-export function exit() {
-
-}
-
-// app.get("/", function(req: Request, res: Response) {
-//     res.render('page/main');
-// });
-
-if (require.main === module) {
-    exports.start();
+if (require.main === module) { // Node를 통해 바로 실행된 파일이라면 require.main은 module과 동일 
+    start();
 }
 
 

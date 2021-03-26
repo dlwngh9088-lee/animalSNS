@@ -1,5 +1,6 @@
 import mysql from 'mysql';
 import dotenv from 'dotenv';
+import { dbOptions } from '../interfaces/interface';
 dotenv.config();
 
 abstract class DbAbstract {
@@ -9,7 +10,7 @@ abstract class DbAbstract {
 }
 
 class Conn {
-    protected dbConnInfo: Object = {}
+    protected dbConnInfo: Object = {};
     constructor() {
         this.dbConnInfo = {
             host: process.env.DEV_DB_HOST,
